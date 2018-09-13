@@ -1,0 +1,9 @@
+#ifndef MOTHER_H
+#define MOTHER_H
+
+class Mother{
+ public:
+  Mother();
+};
+
+#endif //mother_h

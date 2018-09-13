@@ -1,0 +1,13 @@
+#include "Bag.h"
+using namespace std;
+
+template<class T
+T  Bag<T>:: getData (){
+return a;
+}
+
+template<class T>
+myTemplate<T>::Bag(T data)
+{
+a=data;
+}

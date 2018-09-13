@@ -1,0 +1,13 @@
+#include <iostream>
+#include "Mother.h"
+#include "Daughter.h"
+using namespace std;
+
+int main(){
+   Mother name;
+     name.sayName();
+
+  Daughter tina;
+  tina.sayName();
+  
+}

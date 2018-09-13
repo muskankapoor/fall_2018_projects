@@ -1,0 +1,14 @@
+#include<iostream>
+
+#include "mytemplate.h"
+
+using namespace std;
+
+int main(){
+  myTemplate<int> intObject=myTemplate<int>(6);
+  cout<<intObject.getData()<<endl;
+  myTemplate<string> intObject2=myTemplate<string>("Vishal");
+  cout<<intObject2.getData()<<endl;
+  return 0;
+
+}
