@@ -1,23 +1,39 @@
-#set.h
+//Â  Created by Frank M. Carrano and Timothy M. Henry.
+//Â  Copyright (c) 2017 Pearson Education, Hoboken, New Jersey.
+//  Modified by Tiziana Ligorio Fall 2018
 
-#ifndef SET_H
-#define SET_H
+/** Header file for an array-based implementation of the ADT bag.
+ @file ArrayBag.h */
 
-class Daughter: public Mother {
- public:
-  Daughter();
-};
+#ifndef SET_
+#define SET_
 
-#endif //comment  
+#include "SetInterface.h"
 
-class Set{
-  
+template<class ItemType>
+class Set : public SetInterface<ItemType>
+{
+private:
+	static const int DEFAULT_SET_SIZE = 3;     // Small size to test for a full bag
+	ItemType items_[DEFAULT_SET_SIZE];         // Array of bag items
+    int item_count_;                           // Current count of bag items
+    int max_items_;                            // Max capacity of the bag
+   
+    // Returns either the index of the element in the array items that
+    // contains the given target or -1, if the array does not contain
+    // the target.
+    int getIndexOf(const ItemType& target) const;
 
-static const int DEFAULT_SET_SIZE = 4; // for testing purposes we will keep the set small
+public:
+	Set();
+	int getCurrentSize() const;
+	bool isEmpty() const;
+	bool add(const ItemType& newEntry);
+	bool remove(const ItemType& anEntry);
+	void clear();
+	bool contains(const ItemType& anEntry) const;
+    std::vector<ItemType> toVector() const;
+}; // end ArrayBag
 
-ItemType items_[DEFAULT_SET_SIZE]; // array of set items
-
-int item_count_;                  // current count of set items
-
-int max_items_;                   // max capacity of the set
-
+#include "Set.cpp"
+#endif

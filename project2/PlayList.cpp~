@@ -47,7 +47,7 @@ void PlayList::clearPlayList(){
 }
 
 void PlayList::displayPlayList() const{
-  //cout << "Playlist contains:" <<endl;
+   cout << "Playlist contains:" <<endl;
   std::vector<Song> v = playlist_.toVector();
   //cout << "Playlist contains:" <<endl;
 
