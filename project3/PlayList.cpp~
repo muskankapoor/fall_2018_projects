@@ -1,0 +1,192 @@
+/*Muskan Kapoor
+  CSCI 235
+  Professor Ligorio
+  Project 3
+  PlayList.cpp implementation file for PlayList
+*/
+#include "PlayList.h"
+#include <iostream>
+using namespace std;
+
+PlayList::PlayList(){
+    LinkedSet();
+    tail_ptr_ = getPointerToLastNode();
+} /
+
+PlayList::PlayList(const Song& a_song){
+    //create new playlist that begans with the song input
+    Node<Song>* new_entry = new Node<Song>;
+    new_entry->setItem(a_song);
+    new_entry->setNext(head_ptr_);
+    head_ptr_ = new_entry;
+
+    new_entry->setNext(nullptr);
+    tail_ptr_ = getPointerToLastNode();
+}
+
+PlayList::PlayList(const PlayList& a_play_list){
+
+    Node<Song>* current_ptr = a_play_list.head_ptr_;
+    head_ptr_ = new Node<Song>();
+    head_ptr_->setItem(current_ptr->getItem());
+
+    Node<Song>* new_playlist_ptr = head_ptr_;
+    current_ptr = current_ptr->getNext();
+
+    //travels through playlist and performs a deep copy of each song node
+    while(current_ptr != nullptr){
+        Song next_song = current_ptr->getItem();
+        Node<Song>* new_song_entry = new Node<Song>(next_song);
+        new_playlist_ptr->setNext(new_song_entry);
+        new_playlist_ptr = new_playlist_ptr->getNext();
+        current_ptr = current_ptr->getNext();
+    }
+
+    tail_ptr_ = getPointerToLastNode();
+}
+
+int PlayList::getNumberOfSongs() const {
+    return getCurrentSize();
+    // Playlist
+}
+
+bool PlayList::isEmpty() const{
+    if (LinkedSet::isEmpty ()){
+        return true;
+    }
+    return false;
+}
+
+bool PlayList::add(const Song& new_song){
+
+    if(!LinkedSet::contains(new_song)){
+        Node<Song>* new_entry = new Node<Song>;
+        new_entry->setItem(new_song);
+        new_entry->setNext(nullptr);
+        tail_ptr_->setNext(new_entry);
+    }
+    tail_ptr_ = getPointerToLastNode();
+    return true;
+}
+
+bool PlayList::remove(const Song& a_song){
+    Node<Song>* previous_ptr = new Node<Song>;
+    Node<Song>* current_ptr = getPointerTo(a_song, previous_ptr);
+    Node<Song>* temporary_ptr = nullptr;
+    bool canRemove = false;
+    if(head_ptr_->getItem() == a_song){
+        temporary_ptr = head_ptr_;
+
+	// std::cout << "Remove: " << head_ptr_->getItem().getTitle() << std::endl;
+        head_ptr_ = (head_ptr_->getNext());
+        canRemove = true;
+
+    }else if(current_ptr != nullptr){
+        temporary_ptr = current_ptr;
+        previous_ptr->setNext(current_ptr->getNext());
+
+        // delete temporary_ptr;
+        // temporary_ptr = nullptr;
+        canRemove = true;
+    }
+//    delete previous_ptr;
+//    previous_ptr = nullptr;
+
+    return canRemove;
+}
+
+Node<Song>* PlayList::getPointerTo(const Song& target, Node<Song>*& previous_ptr) const{
+    //unloop();
+    Node<Song>* current_ptr = head_ptr_;
+    previous_ptr = nullptr;
+
+    bool found = false;
+
+    if(target == current_ptr->getItem()){
+        // std::cout << "headptr == target: " << std::endl;
+        return current_ptr;
+    }
+
+
+    while(!found && (current_ptr != nullptr))
+    {
+        if(target == current_ptr->getItem()){
+            found = true;
+        }else{
+            previous_ptr = current_ptr;
+            current_ptr = current_ptr->getNext();
+        }
+    }
+    //std::cout << "Previous: " << previous_ptr->getItem().getTitle() << std::endl;
+    //std::cout << "Current: " << current_ptr->getItem().getTitle() << std::endl;
+    /* if(!found){
+         previous_ptr = nullptr;
+     }*/
+    return current_ptr;
+}
+
+Node<Song>* PlayList::getPointerToLastNode() const{
+    //unloop();
+    Node<Song>* current_ptr = head_ptr_;
+    //if(getCurrentSize() == 0){
+    //return current_ptr;
+
+    //}else{
+    while(current_ptr != nullptr){
+        if(current_ptr->getNext() == nullptr){
+            return current_ptr;
+        }else{
+            current_ptr = current_ptr->getNext();
+        }
+    }
+    return current_ptr;
+}
+
+//clears the playlist
+void PlayList::clearPlayList(){
+    //unloop();
+    LinkedSet::clear();
+}
+
+//displays the title, author and album of each song in the playlist
+void PlayList::displayPlayList() const{
+    std::vector<Song> playlist_vector;
+    Node<Song>* current_ptr = head_ptr_;
+
+    int counter = 0;
+    while ((current_ptr != nullptr)){
+        playlist_vector.push_back(current_ptr->getItem());
+        //std::cout<< playlist_vector.at(counter).getTitle() << std::endl;
+        current_ptr = current_ptr->getNext();
+        counter++;
+    }
+
+    //std::vector<Song> playlist_vector = playlist_.toVector();
+
+    for (unsigned i = 0; i< playlist_vector.size(); i++){
+        std::cout << "* Title: " << playlist_vector.at(i).getTitle()
+                  << "* Author: " << playlist_vector.at(i).getAuthor()
+                  << "* Album: " << playlist_vector.at(i).getAlbum()
+                  << " *" << std::endl;
+    }
+
+    std::cout << "End of playlist" << std::endl;
+}
+
+void PlayList::loop(){
+    tail_ptr_->setNext(head_ptr_);
+}
+
+void PlayList::unloop(){
+    Node<Song>* current_ptr = head_ptr_;
+
+    while(current_ptr->getNext() != head_ptr_){
+        current_ptr = current_ptr->getNext();
+    }
+    current_ptr->setNext(nullptr);
+}
+PlayList::~PlayList(){
+    //unloop();
+    // delete tail_ptr_;
+    clear();
+}
